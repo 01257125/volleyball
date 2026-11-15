@@ -11,7 +11,6 @@ struct PlayerDetailView: View {
     @State private var favoriteBounceCount: Int = 0
 
     @State private var showSafari: Bool = false
-    @State private var showVideoSheet: Bool = false
 
     var body: some View {
         ScrollView(.vertical, showsIndicators: false) {
@@ -46,16 +45,7 @@ struct PlayerDetailView: View {
         .toolbar(.hidden, for: .tabBar)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
-                HStack(spacing: 12) {
-                    Button {
-                        showVideoSheet = true
-                    } label: {
-                        Image(systemName: "play.tv")
-                            .foregroundColor(player.school.themeColor)
-                    }
-
-                    favoriteToolbarButton
-                }
+                favoriteToolbarButton
             }
         }
         .sheet(isPresented: $showSafari) {
@@ -64,30 +54,7 @@ struct PlayerDetailView: View {
                     .ignoresSafeArea()
             }
         }
-        .sheet(isPresented: $showVideoSheet) {
-            NavigationStack {
-                VStack(spacing: 16) {
-                    if let localVideoURL = Bundle.main.url(forResource: "sample_video", withExtension: "mp4") {
-                        VideoPlayer(player: AVPlayer(url: localVideoURL))
-                            .frame(height: 240)
-                            .clipShape(RoundedRectangle(cornerRadius: 16))
-                            .padding(.horizontal)
-                    }
-                    Text("SwiftUI VideoPlayer 影音播放展示")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                }
-                .navigationTitle("影音展示")
-                .navigationBarTitleDisplayMode(.inline)
-                .toolbar {
-                    ToolbarItem(placement: .topBarTrailing) {
-                        Button("關閉") {
-                            showVideoSheet = false
-                        }
-                    }
-                }
-            }
-        }
+
         .onAppear {
             withAnimation(.spring(response: 0.5, dampingFraction: 0.8)) {
                 isHeaderAppeared = true
