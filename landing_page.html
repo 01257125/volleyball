@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>排球少年!! (Haikyuu!!) iOS App - 飛吧，頂端的景色</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #FF6600;
+            --primary-glow: rgba(255, 102, 0, 0.4);
+            --bg-dark: #0D0E12;
+            --card-bg: rgba(26, 29, 36, 0.85);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --text-main: #FFFFFF;
+            --text-sub: #9E9EA7;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Ambient Glow Backgrounds */
+        .ambient-glow {
+            position: fixed;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, var(--primary-glow) 0%, transparent 70%);
+            top: -150px;
+            right: -150px;
+            z-index: 0;
+            pointer-events: none;
+            filter: blur(80px);
+        }
+
+        .ambient-glow-2 {
+            position: fixed;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(235, 78, 61, 0.25) 0%, transparent 70%);
+            bottom: 50px;
+            left: -100px;
+            z-index: 0;
+            pointer-events: none;
+            filter: blur(100px);
+        }
+
+        header {
+            position: relative;
+            z-index: 10;
+            padding: 24px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: #fff;
+            font-weight: 900;
+            font-size: 1.3rem;
+            letter-spacing: 1px;
+        }
+
+        .brand-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #FF6600, #FF3300);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            box-shadow: 0 4px 14px var(--primary-glow);
+        }
+
+        .nav-links a {
+            color: var(--text-sub);
+            text-decoration: none;
+            margin-left: 28px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            z-index: 5;
+            padding: 80px 8% 100px;
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 60px;
+            align-items: center;
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        .hero-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 102, 0, 0.12);
+            color: var(--primary);
+            border: 1px solid rgba(255, 102, 0, 0.3);
+            padding: 6px 16px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 24px;
+            text-transform: uppercase;
+        }
+
+        .hero-title {
+            font-size: 3.4rem;
+            font-weight: 900;
+            line-height: 1.15;
+            margin-bottom: 20px;
+            background: linear-gradient(180deg, #FFFFFF 0%, #D8D8DC 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-title span {
+            background: linear-gradient(135deg, #FF9933 0%, #FF5500 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-desc {
+            font-size: 1.15rem;
+            color: var(--text-sub);
+            margin-bottom: 36px;
+            max-width: 520px;
+        }
+
+        .cta-group {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(135deg, #FF6600, #FF4500);
+            color: white;
+            text-decoration: none;
+            padding: 14px 28px;
+            border-radius: 14px;
+            font-weight: 700;
+            font-size: 1rem;
+            box-shadow: 0 8px 24px var(--primary-glow);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(255, 102, 0, 0.6);
+        }
+
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.06);
+            color: #fff;
+            border: 1px solid var(--card-border);
+            text-decoration: none;
+            padding: 14px 24px;
+            border-radius: 14px;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: background 0.2s;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        /* Mockup Display */
+        .mockup-container {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .phone-mockup {
+            width: 320px;
+            height: 640px;
+            background: #15171C;
+            border-radius: 46px;
+            border: 8px solid #2B2E38;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.8), 0 0 40px rgba(255, 102, 0, 0.25);
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .notch {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 24px;
+            background: #000;
+            border-radius: 14px;
+            z-index: 100;
+        }
+
+        .mockup-inner {
+            padding: 44px 16px 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            background: #0D0E12;
+        }
+
+        .mockup-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 14px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .mockup-card img {
+            width: 54px;
+            height: 54px;
+            border-radius: 12px;
+            object-fit: cover;
+        }
+
+        .mockup-card-text h4 {
+            font-size: 0.95rem;
+            font-weight: 700;
+        }
+
+        .mockup-card-text p {
+            font-size: 0.75rem;
+            color: var(--text-sub);
+        }
+
+        /* Features Section */
+        .features {
+            position: relative;
+            z-index: 5;
+            padding: 90px 8%;
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-title {
+            font-size: 2.4rem;
+            font-weight: 800;
+            margin-bottom: 12px;
+        }
+
+        .section-sub {
+            color: var(--text-sub);
+            font-size: 1.05rem;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 28px;
+        }
+
+        .feature-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 22px;
+            padding: 32px;
+            backdrop-filter: blur(20px);
+            transition: transform 0.3s, border-color 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-6px);
+            border-color: rgba(255, 102, 0, 0.4);
+        }
+
+        .feature-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
+            background: rgba(255, 102, 0, 0.15);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            margin-bottom: 20px;
+        }
+
+        .feature-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+
+        .feature-card p {
+            color: var(--text-sub);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid var(--card-border);
+            padding: 40px 8%;
+            text-align: center;
+            color: var(--text-sub);
+            font-size: 0.9rem;
+            position: relative;
+            z-index: 5;
+        }
+
+        @media (max-width: 900px) {
+            .hero {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 40px;
+            }
+            .hero-desc {
+                margin: 0 auto 36px;
+            }
+            .cta-group {
+                justify-content: center;
+            }
+            .hero-title {
+                font-size: 2.6rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="ambient-glow"></div>
+    <div class="ambient-glow-2"></div>
+
+    <header>
+        <a href="#" class="brand">
+            <div class="brand-icon">🏐</div>
+            <span>排球少年！！</span>
+        </a>
+        <nav class="nav-links">
+            <a href="#features">功能特色</a>
+            <a href="#players">頂級球員</a>
+            <a href="#matches">宿命戰役</a>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-tag">✨ iOS 18 & iPadOS 18 專屬設計</div>
+            <h1 class="hero-title">飛吧！<br>看見<span>「頂端的景色」</span></h1>
+            <p class="hero-desc">
+                專為排球少年愛好者打造的極致沉浸 App。收錄十位傳奇球員深度檔案、經典宿命對決紀錄、高畫質電影劇照牆與精華剪輯影音。
+            </p>
+            <div class="cta-group">
+                <a href="#" class="btn-primary">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.37c.62-.75 1.04-1.8 0.92-2.85-.9.04-2 .6-2.65 1.35-.58.67-.99 1.74-.86 2.76 1.01.08 2.06-.52 2.59-1.26z"/>
+                    </svg>
+                    App Store 下載
+                </a>
+                <a href="#features" class="btn-secondary">了解更多</a>
+            </div>
+        </div>
+
+        <div class="mockup-container">
+            <div class="phone-mockup">
+                <div class="notch"></div>
+                <div class="mockup-inner">
+                    <div style="font-weight: 800; font-size: 1.1rem; color: #fff; margin-bottom: 6px;">烏野高校名冊</div>
+                    <div class="mockup-card">
+                        <img src="https://static.wikia.nocookie.net/haikyuu/images/d/d2/Hinata_s4-e1-4.png" alt="日向 翔陽">
+                        <div class="mockup-card-text">
+                            <h4>#10 日向 翔陽</h4>
+                            <p>烏野最強誘餌・超速怪人快攻</p>
+                        </div>
+                    </div>
+                    <div class="mockup-card">
+                        <img src="https://static.wikia.nocookie.net/haikyuu/images/e/e7/Kageyama_s4-e7-3.png" alt="影山 飛雄">
+                        <div class="mockup-card-text">
+                            <h4>#9 影山 飛雄</h4>
+                            <p>球場上的王者・精密制導舉球</p>
+                        </div>
+                    </div>
+                    <div class="mockup-card">
+                        <img src="https://static.wikia.nocookie.net/haikyuu/images/7/73/Tsukishima_s4-e6-2.png" alt="月島 螢">
+                        <div class="mockup-card-text">
+                            <h4>#11 月島 螢</h4>
+                            <p>烏野理性司令塔・極致單人攔網</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="features" id="features">
+        <div class="section-header">
+            <h2 class="section-title">極致技術與匠心設計</h2>
+            <p class="section-sub">深入整合 SwiftUI 現代框架核心能力</p>
+        </div>
+        <div class="grid-3">
+            <div class="feature-card">
+                <div class="feature-icon">📑</div>
+                <h3>iPadOS 18 側邊欄適配</h3>
+                <p>全面支援 TabView 與 .sidebarAdaptable 模式。在 iPhone 上提供靈動底部標籤列，在 iPad 上自動轉化為頂部膠囊列與展開式側邊欄。</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3>吸頂標題與高效捲動</h3>
+                <p>採用 LazyVStack 搭配 pinnedViews: [.sectionHeaders]，實現平滑流暢的賽事吸頂分組，重現垃圾場決戰等各大宿命戰役。</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🎞️</div>
+                <h3>自適應照片牆與動畫轉場</h3>
+                <p>LazyVGrid 搭配 Adaptive 欄位排版與 spring 彈簧物理動畫，點選立即展開高畫質劇照燈箱，享受無拘束的視覺享受。</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🎬</div>
+                <h3>AVKit 精彩影音播放</h3>
+                <p>整合原生 VideoPlayer 與 SFSafariViewController，隨時回顧賽事高光片段並隨時查閱選手官方歷史檔案。</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🎨</div>
+                <h3>深色模式與生動濾鏡</h3>
+                <p>完美相容 iOS Dark & Light Mode，搭配飽和度、對比度自訂 ViewModifier 與 SF Symbol 彈跳動態反饋。</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📱</div>
+                <h3>分頁水平滑動捲動</h3>
+                <p>運用 .scrollTargetBehavior(.paging) 打造宛如原生 App Store 的水平大圖推薦卡片，滑動順暢自然。</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2026 排球少年！！ (Haikyuu!!) iOS 應用程式專題項目。飛吧（飛べ）！</p>
+    </footer>
+</body>
+</html>
